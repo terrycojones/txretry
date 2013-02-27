@@ -1,0 +1,13 @@
+Version 0.0.2 notes (August 28, 2011)
+-------------------------------------
+
+Changed setup.py to have Github URLs for home page and download. Added
+.gitignore.
+
+Version 0.0.1 notes (August 27, 2011)
+-------------------------------------
+
+Initial release.  This code has been in production use for a couple of
+years, so despite its version number it should be considered fairly safe to
+use.
+

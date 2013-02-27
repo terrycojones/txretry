@@ -1,0 +1,10 @@
+txretry provides a Twisted class RetryingCall that will attempt to call a
+function until it succeeds. A back-off iterator (an interator yielding
+intervals) can be provided to set the interval between retried calls.
+When/if the back-off iterator raises StopIteration the attempt to call the
+function is aborted. An instance of the RetryingCall class provides a
+start() method that returns a deferred that will fire with the function
+result or errback with the first failure encountered.
+
+Usage of the class is described in the following blog post:
+http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/
