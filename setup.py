@@ -37,6 +37,6 @@ try:
 except ImportError:
     from distutils.core import setup
 else:
-    d['install_requires'] = ['Twisted']
+    d['install_requires'] = ['Twisted', 'six']
 
 setup(**d)
