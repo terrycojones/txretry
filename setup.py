@@ -1,18 +1,23 @@
 #!/usr/bin/env python
 
-import os
+description = '''\
+txretry provides a Twisted class, RetryingCall, that calls a function
+until it succeeds. A back-off iterator (a generator function that yields
+intervals) can be specified to customize the interval between retried
+calls.  When/if the back-off iterator raises StopIteration the attempt to
+call the function is aborted. An instance of the RetryingCall class
+provides a start method that returns a Deferred that will fire with the
+function result or errback with the first failure encountered.
 
-
-# Utility function to read the README file.
-# Credit: http://pypi.python.org/pypi/an_example_pypi_project
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+Usage of the class is described in the following blog post:
+http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/
+'''
 
 d = dict(name='txretry',
-         version='0.0.3',
+         version='1.0.0',
          provides=['txretry'],
          maintainer='Fluidinfo Inc.',
-         maintainer_email='info@fluidinfo.com',
+         maintainer_email='terry@jon.es',
          url='https://github.com/fluidinfo/txretry',
          download_url='https://github.com/fluidinfo/txretry',
          packages=['txretry', 'txretry.test'],
@@ -26,9 +31,9 @@ d = dict(name='txretry',
              'Operating System :: OS Independent',
              'Topic :: Software Development :: Libraries :: Python Modules',
              ],
-         description=('A Twisted class for retrying failed calls '
+         description=('A Twisted class for retrying failing calls '
                       'with a customizable back-off schedule.'),
-         long_description=read('README'),
+         long_description=description,
          )
 
 try:
