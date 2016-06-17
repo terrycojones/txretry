@@ -1,6 +1,7 @@
 from operator import add, mul
 from functools import partial
 
+import six
 from twisted.trial import unittest
 from twisted.internet import defer
 
@@ -15,21 +16,21 @@ class TestBackoffIterator(unittest.TestCase):
         must be zero (in other words we're testing that by default the
         function will be called immediately)."""
         bi = simpleBackoffIterator()
-        delay = bi.next()
+        delay = six.next(bi)
         self.assertEqual(0.0, delay)
 
     def testNow(self):
         """When now=True is passed to the back-off iterator, the first
         delay it returns must be zero."""
         bi = simpleBackoffIterator(now=True)
-        delay = bi.next()
+        delay = six.next(bi)
         self.assertEqual(0.0, delay)
 
     def testNotNow(self):
         """When now=False is passed to the back-off iterator, the first
         delay it returns must not be zero."""
         bi = simpleBackoffIterator(now=False)
-        delay = bi.next()
+        delay = six.next(bi)
         self.assertNotEqual(0.0, delay)
 
     def testInitDelay(self):
@@ -37,7 +38,7 @@ class TestBackoffIterator(unittest.TestCase):
         returned by the iterator."""
         initDelay = 7
         bi = simpleBackoffIterator(now=False, initDelay=initDelay)
-        delay = bi.next()
+        delay = six.next(bi)
         self.assertEqual(initDelay, delay)
 
     def testDefaultSettingsEventuallyHalt(self):
@@ -48,7 +49,7 @@ class TestBackoffIterator(unittest.TestCase):
             forever. If it doesn't raise this test will never finish."""
             bi = simpleBackoffIterator()
             while True:
-                bi.next()
+                six.next(bi)
         self.assertRaises(StopIteration, exhaust)
 
     def testDefaultSettingsNoNegativeDelays(self):
@@ -62,8 +63,9 @@ class TestBackoffIterator(unittest.TestCase):
         maxResults = 12
         bi = simpleBackoffIterator(now=False, maxResults=maxResults)
         for _ in range(maxResults):
-            bi.next()
-        self.assertRaises(StopIteration, bi.next)
+            six.next(bi)
+        with self.assertRaises(StopIteration):
+            six.next(bi)
 
     def testConstant(self):
         """Make a back-off iterator that yields a constant for a certain
@@ -76,9 +78,9 @@ class TestBackoffIterator(unittest.TestCase):
                                    incFunc=lambda _: constant,
                                    maxDelay=10.0,
                                    maxResults=n + 1)
-        self.assertEqual(initDelay, bi.next())
+        self.assertEqual(initDelay, six.next(bi))
         for _ in range(n):
-            self.assertEqual(constant, bi.next())
+            self.assertEqual(constant, six.next(bi))
 
     def testMul3(self):
         """Make a back-off iterator whose increment function multiplies the
@@ -88,9 +90,9 @@ class TestBackoffIterator(unittest.TestCase):
                                    incFunc=partial(mul, 3.0),
                                    maxDelay=10.0,
                                    maxResults=10)
-        self.assertEqual(1.0, bi.next())
-        self.assertEqual(3.0, bi.next())
-        self.assertEqual(9.0, bi.next())
+        self.assertEqual(1.0, six.next(bi))
+        self.assertEqual(3.0, six.next(bi))
+        self.assertEqual(9.0, six.next(bi))
 
     def testAdd3(self):
         """Make a back-off iterator whose increment function adds 3 to the
@@ -100,9 +102,9 @@ class TestBackoffIterator(unittest.TestCase):
                                    incFunc=partial(add, 3.0),
                                    maxDelay=10.0,
                                    maxResults=10)
-        self.assertEqual(2.0, bi.next())
-        self.assertEqual(5.0, bi.next())
-        self.assertEqual(8.0, bi.next())
+        self.assertEqual(2.0, six.next(bi))
+        self.assertEqual(5.0, six.next(bi))
+        self.assertEqual(8.0, six.next(bi))
 
     def testMaxDelay(self):
         """Make a back-off iterator whose increment function multiplies the
@@ -113,11 +115,11 @@ class TestBackoffIterator(unittest.TestCase):
                                    incFunc=partial(mul, 3.0),
                                    maxDelay=10.0,
                                    maxResults=10)
-        self.assertEqual(1.0, bi.next())
-        self.assertEqual(3.0, bi.next())
-        self.assertEqual(9.0, bi.next())
-        self.assertEqual(10.0, bi.next())
-        self.assertEqual(10.0, bi.next())
+        self.assertEqual(1.0, six.next(bi))
+        self.assertEqual(3.0, six.next(bi))
+        self.assertEqual(9.0, six.next(bi))
+        self.assertEqual(10.0, six.next(bi))
+        self.assertEqual(10.0, six.next(bi))
 
 
 class _InitiallyFailing(object):

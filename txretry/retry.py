@@ -16,6 +16,7 @@ from operator import mul
 from functools import partial
 import time
 
+import six
 from twisted.internet import reactor, defer, task
 from twisted.python import log, failure
 
@@ -103,7 +104,7 @@ class RetryingCall(object):
         After the next delay amount, call our function.
         """
         try:
-            delay = self._backoffIterator.next()
+            delay = six.next(self._backoffIterator)
         except StopIteration:
             log.msg('StopIteration in RetryingCall: ran out of attempts.')
             self._deferred.errback(self.failures[0] if self.failures else None)
