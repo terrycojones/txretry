@@ -360,7 +360,7 @@ class TestRetryingCall(unittest.TestCase):
             if not f.check(ValueError, NameError):
                 return f
         f = _InitiallyFailing(2, result=15,
-                             exceptionList=[ValueError, NameError])
+                              exceptionList=[ValueError, NameError])
         rc = RetryingCall(f)
         d = rc.start(failureTester=_failureTester)
         d.addCallback(lambda result: self.assertEqual(15, result))

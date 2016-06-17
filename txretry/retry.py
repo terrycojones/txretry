@@ -33,7 +33,7 @@ def simpleBackoffIterator(maxResults=10, maxDelay=120.0, now=True,
     @param initDelay: the initial delay.
     @param incFunc: a function of one argument (the latest delay), which
         returns the next delay. Default: double the previous delay.
-    @return: a generator that produces floating delays.
+    @return: a generator function that yields C{float} delays.
     """
     assert maxResults > 0
     remaining = maxResults
